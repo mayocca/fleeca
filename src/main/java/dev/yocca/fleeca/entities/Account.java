@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 
 public class Account extends Entity {
 
-    private Integer id;
+    private int id;
     private String owner;
     private String alias;
-    private Double balance;
+    private double balance;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
