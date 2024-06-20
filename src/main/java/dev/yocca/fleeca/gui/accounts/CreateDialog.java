@@ -1,8 +1,8 @@
 package dev.yocca.fleeca.gui.accounts;
 
 import dev.yocca.fleeca.exceptions.ServiceException;
-import dev.yocca.fleeca.gui.events.AccountEvent;
-import dev.yocca.fleeca.gui.events.AccountEventListener;
+import dev.yocca.fleeca.gui.events.AccountCreatedEvent;
+import dev.yocca.fleeca.gui.events.AccountCreatedListener;
 import dev.yocca.fleeca.entities.Account;
 import dev.yocca.fleeca.services.AccountService;
 
@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 public class CreateDialog extends javax.swing.JDialog {
 
-    private List<AccountEventListener> listeners = new ArrayList<>();
+    private List<AccountCreatedListener> listeners = new ArrayList<>();
 
     public CreateDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -147,7 +147,7 @@ public class CreateDialog extends javax.swing.JDialog {
         pack();
     }
 
-    private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_confirmButtonActionPerformed
+    private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {
         Account account = new Account(this.clientTextField.getText(), this.aliasTextField.getText());
         AccountService accountService = new AccountService();
         try {
@@ -157,22 +157,18 @@ public class CreateDialog extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        notifyAccountCreation();
+        notifyAccountCreation(account);
         this.dispose();
-    }// GEN-LAST:event_confirmButtonActionPerformed
+    }
 
-    public void addAccountEventListener(AccountEventListener listener) {
+    public void addAccountCreationListener(AccountCreatedListener listener) {
         listeners.add(listener);
     }
 
-    public void removeAccountEventListener(AccountEventListener listener) {
-        listeners.remove(listener);
-    }
-
-    private void notifyAccountCreation() {
-        AccountEvent event = new AccountEvent(this);
-        for (AccountEventListener listener : listeners) {
-            listener.accountEvent(event);
+    private void notifyAccountCreation(Account account) {
+        AccountCreatedEvent event = new AccountCreatedEvent(this, account);
+        for (AccountCreatedListener listener : listeners) {
+            listener.accountCreated(event);
         }
     }
 

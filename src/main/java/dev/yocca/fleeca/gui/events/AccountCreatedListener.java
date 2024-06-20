@@ -10,6 +10,6 @@ import java.util.EventListener;
  *
  * @author mayocca
  */
-public interface AccountEventListener extends EventListener {
-    void accountEvent(AccountEvent event);
+public interface AccountCreatedListener extends EventListener {
+    void accountCreated(AccountCreatedEvent evt);
 }

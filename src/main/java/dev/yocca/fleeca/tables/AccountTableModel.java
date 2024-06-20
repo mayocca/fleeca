@@ -16,17 +16,23 @@ public class AccountTableModel extends AbstractTableModel {
     private final Class[] columnClasses = { Integer.class, String.class, String.class, Double.class };
     private List<Account> accounts;
 
-    public AccountTableModel() {
-        this.accounts = new ArrayList<>();
-    }
-
     public AccountTableModel(List<Account> accounts) {
         this.accounts = accounts;
     }
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
-        this.fireTableDataChanged();
+        fireTableDataChanged();
+    }
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+        fireTableDataChanged();
+    }
+
+    public void removeAccount(Account account) {
+        accounts.remove(account);
+        fireTableDataChanged();
     }
 
     @Override
@@ -66,14 +72,4 @@ public class AccountTableModel extends AbstractTableModel {
             default -> null;
         };
     }
-
-    @Override
-    public void setValueAt(Object o, int i, int i1) {
-        Account account = accounts.get(i);
-        if (i1 == 2) {
-            account.setAlias((String) o);
-        }
-        this.fireTableCellUpdated(i, i1);
-    }
-
 }
