@@ -27,10 +27,10 @@ public class CreateDialog extends JDialog {
 
     public CreateDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
+        setup();
     }
 
-    private void initComponents() {
+    private void setup() {
 
         accountsHeader = new JLabel();
         jPanel1 = new JPanel();
@@ -156,6 +156,7 @@ public class CreateDialog extends JDialog {
                                 .addContainerGap()));
 
         pack();
+        setLocationRelativeTo(null);
     }
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {

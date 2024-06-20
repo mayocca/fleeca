@@ -21,6 +21,7 @@ public class AccountsPanel extends JPanel {
     private AccountService accountService;
 
     public AccountsPanel() {
+        super();
         this.accountService = new AccountService();
         initComponents();
     }

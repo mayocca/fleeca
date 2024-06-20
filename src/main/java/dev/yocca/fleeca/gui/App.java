@@ -15,8 +15,8 @@ public class App extends JFrame {
     private Sidebar sidebar;
 
     public App() {
+        super();
         setup();
-        mount();
     }
 
     private void setup() {
@@ -30,9 +30,7 @@ public class App extends JFrame {
         mainPanel = new JPanel();
         accountsPanel = new dev.yocca.fleeca.gui.accounts.AccountsPanel();
         sidebar = new Sidebar();
-    }
 
-    private void mount() {
         splitPanel.setEnabled(false);
 
         GroupLayout userAccountPanelLayout = new GroupLayout(userAccountPanel);
@@ -74,10 +72,11 @@ public class App extends JFrame {
                         .addComponent(splitPanel));
 
         pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> new App().setVisible(true));
+        SwingUtilities.invokeLater(App::new);
     }
-
 }
