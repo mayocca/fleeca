@@ -1,29 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package dev.yocca.fleeca.gui.accounts;
 
-import dev.yocca.fleeca.exceptions.RepositoryException;
+import dev.yocca.fleeca.dao.AccountDAO;
+import dev.yocca.fleeca.exceptions.DAOException;
 import dev.yocca.fleeca.gui.events.AccountEvent;
 import dev.yocca.fleeca.gui.events.AccountEventListener;
 import dev.yocca.fleeca.entities.Account;
-import dev.yocca.fleeca.repositories.AccountRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author mayocca
- */
 public class CreateAccountDialog extends javax.swing.JDialog {
 
     private List<AccountEventListener> listeners = new ArrayList<>();
 
-    /**
-     * Creates new form CreateAccountDialog
-     */
     public CreateAccountDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -159,10 +148,10 @@ public class CreateAccountDialog extends javax.swing.JDialog {
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_confirmButtonActionPerformed
         Account account = new Account(this.clientTextField.getText(), this.aliasTextField.getText());
-        AccountRepository repository = new AccountRepository();
+        AccountDAO accountDAO = new AccountDAO();
         try {
-            repository.add(account);
-        } catch (RepositoryException e) {
+            accountDAO.add(account);
+        } catch (DAOException e) {
             JOptionPane.showMessageDialog(clientPanel, e.getMessage(), "Error al crear cuenta",
                     JOptionPane.ERROR_MESSAGE);
             return;
