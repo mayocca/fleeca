@@ -2,7 +2,6 @@ package dev.yocca.fleeca.dao;
 
 import dev.yocca.fleeca.database.DatabaseConnection;
 import dev.yocca.fleeca.dao.interfaces.GenericDAO;
-import dev.yocca.fleeca.exceptions.DatabaseConnectionException;
 import dev.yocca.fleeca.exceptions.DAOException;
 import dev.yocca.fleeca.entities.Account;
 
@@ -17,7 +16,7 @@ public class AccountDAO implements GenericDAO<Account> {
         Connection connection;
         try {
             connection = DatabaseConnection.getInstance();
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException e) {
             throw new DAOException("No se pudo realizar la conexión a la base de datos", e);
         }
 
@@ -27,17 +26,7 @@ public class AccountDAO implements GenericDAO<Account> {
             statement.setString(2, item.getAlias());
             statement.executeUpdate();
         } catch (SQLException e) {
-            String message = e.getMessage();
-            if (message.contains("accounts_alias_key")) {
-                throw new DAOException("El alias ya está en uso", e);
-            }
-            if (message.contains("valid_owner")) {
-                throw new DAOException("El nombre del cliente no es válido", e);
-            }
-            if (message.contains("valid_alias")) {
-                throw new DAOException("El alias no es válido", e);
-            }
-            throw new DAOException("No se pudo insertar el registro", e);
+            throw new DAOException(e.getMessage(), e);
         }
     }
 
@@ -46,7 +35,7 @@ public class AccountDAO implements GenericDAO<Account> {
         Connection connection;
         try {
             connection = DatabaseConnection.getInstance();
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException e) {
             throw new DAOException("No se pudo realizar la conexión a la base de datos", e);
         }
 
@@ -64,7 +53,7 @@ public class AccountDAO implements GenericDAO<Account> {
                         result.getTimestamp("updated_at").toLocalDateTime());
             }
         } catch (SQLException e) {
-            throw new DAOException("No se pudo obtener el registro", e);
+            throw new DAOException(e.getMessage(), e);
         }
 
         return null;
@@ -75,7 +64,7 @@ public class AccountDAO implements GenericDAO<Account> {
         Connection connection;
         try {
             connection = DatabaseConnection.getInstance();
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException e) {
             throw new DAOException("No se pudo realizar la conexión a la base de datos", e);
         }
 
@@ -95,7 +84,7 @@ public class AccountDAO implements GenericDAO<Account> {
                         result.getTimestamp("updated_at").toLocalDateTime()));
             }
         } catch (SQLException e) {
-            throw new DAOException("No se pudo obtener el registro", e);
+            throw new DAOException(e.getMessage(), e);
         }
 
         return accounts;
@@ -106,7 +95,7 @@ public class AccountDAO implements GenericDAO<Account> {
         Connection connection;
         try {
             connection = DatabaseConnection.getInstance();
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException e) {
             throw new DAOException("No se pudo realizar la conexión a la base de datos", e);
         }
 
@@ -121,7 +110,7 @@ public class AccountDAO implements GenericDAO<Account> {
             if (message.contains("accounts_alias_key")) {
                 throw new DAOException("El alias ya está en uso", e);
             }
-            throw new DAOException("No se pudo actualizar el registro", e);
+            throw new DAOException(e.getMessage(), e);
         }
     }
 
@@ -130,7 +119,7 @@ public class AccountDAO implements GenericDAO<Account> {
         Connection connection;
         try {
             connection = DatabaseConnection.getInstance();
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException e) {
             throw new DAOException("No se pudo realizar la conexión a la base de datos", e);
         }
 
@@ -139,7 +128,7 @@ public class AccountDAO implements GenericDAO<Account> {
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("No se pudo eliminar el registro", e);
+            throw new DAOException(e.getMessage(), e);
         }
     }
 }

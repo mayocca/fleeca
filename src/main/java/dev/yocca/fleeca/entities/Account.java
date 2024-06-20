@@ -1,10 +1,10 @@
 package dev.yocca.fleeca.entities;
 
-import dev.yocca.fleeca.database.Model;
+import dev.yocca.fleeca.database.Entity;
 
 import java.time.LocalDateTime;
 
-public class Account extends Model {
+public class Account extends Entity {
 
     private Integer id;
     private String owner;

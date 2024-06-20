@@ -1,10 +1,10 @@
 package dev.yocca.fleeca.gui.accounts;
 
-import dev.yocca.fleeca.dao.AccountDAO;
-import dev.yocca.fleeca.exceptions.DAOException;
+import dev.yocca.fleeca.exceptions.ServiceException;
 import dev.yocca.fleeca.gui.events.AccountEvent;
 import dev.yocca.fleeca.gui.events.AccountEventListener;
 import dev.yocca.fleeca.entities.Account;
+import dev.yocca.fleeca.services.AccountService;
 import dev.yocca.fleeca.tables.AccountTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +17,10 @@ import javax.swing.event.TableModelEvent;
  */
 public class AccountsPanel extends javax.swing.JPanel implements AccountEventListener {
 
-    private AccountDAO accountDAO;
+    private AccountService accountService;
 
     public AccountsPanel() {
-        this.accountDAO = new AccountDAO();
+        this.accountService = new AccountService();
         initComponents();
     }
 
@@ -35,8 +35,8 @@ public class AccountsPanel extends javax.swing.JPanel implements AccountEventLis
 
         List<Account> accounts = new ArrayList<>();
         try {
-            accounts = accountDAO.getAll();
-        } catch (DAOException ex) {
+            accounts = accountService.getAll();
+        } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         AccountTableModel model = new AccountTableModel(accounts);
@@ -46,10 +46,10 @@ public class AccountsPanel extends javax.swing.JPanel implements AccountEventLis
                 Integer id = (Integer) model.getValueAt(row, 0);
                 String alias = (String) model.getValueAt(row, 2);
                 try {
-                    Account account = accountDAO.get(id);
+                    Account account = accountService.get(id);
                     account.setAlias(alias);
-                    accountDAO.update(account);
-                } catch (DAOException ex) {
+                    accountService.update(account);
+                } catch (ServiceException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -128,21 +128,21 @@ public class AccountsPanel extends javax.swing.JPanel implements AccountEventLis
     }// </editor-fold>//GEN-END:initComponents
 
     private void createAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_createAccountButtonActionPerformed
-        CreateAccountDialog dialog = new CreateAccountDialog(null, true);
+        CreateDialog dialog = new CreateDialog(null, true);
         dialog.addAccountEventListener(this);
         dialog.setVisible(true);
     }// GEN-LAST:event_createAccountButtonActionPerformed
 
     private void deleteAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_deleteAccountButtonActionPerformed
-        Integer response = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar la cuenta?",
+        int response = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar la cuenta?",
                 "Eliminar cuenta", JOptionPane.YES_NO_OPTION);
         if (response == 0) {
             AccountTableModel model = (AccountTableModel) accountsTable.getModel();
-            Integer row = accountsTable.getSelectedRow();
-            Integer id = (Integer) model.getValueAt(row, 0);
+            int row = accountsTable.getSelectedRow();
+            int id = (int) model.getValueAt(row, 0);
             try {
-                accountDAO.delete(id);
-            } catch (DAOException e) {
+                accountService.delete(id);
+            } catch (ServiceException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -167,8 +167,8 @@ public class AccountsPanel extends javax.swing.JPanel implements AccountEventLis
     public void updateTable() {
         AccountTableModel model = (AccountTableModel) accountsTable.getModel();
         try {
-            model.setAccounts(accountDAO.getAll());
-        } catch (DAOException e) {
+            model.setAccounts(accountService.getAll());
+        } catch (ServiceException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

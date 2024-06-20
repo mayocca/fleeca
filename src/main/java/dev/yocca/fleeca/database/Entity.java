@@ -1,6 +1,6 @@
 package dev.yocca.fleeca.database;
 
-public abstract class Model {
+public abstract class Entity {
     public abstract String getTable();
     
     public String getKeyName() {

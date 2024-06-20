@@ -1,10 +1,16 @@
+drop table if exists accounts;
+
 create table accounts (
     id serial primary key,
-    owner text not null constraint valid_owner check (owner <> ''),
-    alias text unique constraint valid_alias check (alias <> ''),
-    balance numeric not null default 0 constraint positive_balance check (balance >= 0),
+    owner text not null,
+    alias text,
+    balance numeric not null default 0,
     created_at timestamp not null default now(),
-    updated_at timestamp not null default now()
+    updated_at timestamp not null default now(),
+    constraint valid_owner check (owner <> ''),
+    constraint valid_alias check (alias <> ''),
+    constraint unique_alias unique (alias),
+    constraint positive_balance check (balance >= 0)
 );
 create or replace function lowercase_alias() returns trigger as $$ begin new.alias = lower(new.alias);
 return new;

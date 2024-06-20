@@ -1,19 +1,20 @@
 package dev.yocca.fleeca.gui.accounts;
 
-import dev.yocca.fleeca.dao.AccountDAO;
-import dev.yocca.fleeca.exceptions.DAOException;
+import dev.yocca.fleeca.exceptions.ServiceException;
 import dev.yocca.fleeca.gui.events.AccountEvent;
 import dev.yocca.fleeca.gui.events.AccountEventListener;
 import dev.yocca.fleeca.entities.Account;
+import dev.yocca.fleeca.services.AccountService;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class CreateAccountDialog extends javax.swing.JDialog {
+public class CreateDialog extends javax.swing.JDialog {
 
     private List<AccountEventListener> listeners = new ArrayList<>();
 
-    public CreateAccountDialog(java.awt.Frame parent, boolean modal) {
+    public CreateDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -148,10 +149,10 @@ public class CreateAccountDialog extends javax.swing.JDialog {
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_confirmButtonActionPerformed
         Account account = new Account(this.clientTextField.getText(), this.aliasTextField.getText());
-        AccountDAO accountDAO = new AccountDAO();
+        AccountService accountService = new AccountService();
         try {
-            accountDAO.add(account);
-        } catch (DAOException e) {
+            accountService.add(account);
+        } catch (ServiceException e) {
             JOptionPane.showMessageDialog(clientPanel, e.getMessage(), "Error al crear cuenta",
                     JOptionPane.ERROR_MESSAGE);
             return;

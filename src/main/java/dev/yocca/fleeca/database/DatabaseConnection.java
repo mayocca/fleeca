@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dev.yocca.fleeca.database;
 
-import dev.yocca.fleeca.exceptions.DatabaseConnectionException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -18,8 +13,7 @@ public class DatabaseConnection {
 
     private DatabaseConnection() {}
 
-    private static Connection createConnection() throws DatabaseConnectionException {
-        Connection conn;
+    private static Connection createConnection() throws SQLException {
         String url = "jdbc:postgresql://localhost:5432/postgres";
 
         Properties props = new Properties();
@@ -28,17 +22,10 @@ public class DatabaseConnection {
         props.setProperty("user", "postgres");
         props.setProperty("password", "password");
 
-        try {
-            conn = DriverManager.getConnection(url, props);    
-        } catch (SQLException e) {
-            throw new DatabaseConnectionException("No se pudo realizar la conexión a la base de datos");
-        }
-        
-        
-        return conn;
+        return DriverManager.getConnection(url, props);
     }
 
-    public static Connection getInstance() throws DatabaseConnectionException {
+    public static Connection getInstance() throws SQLException {
         synchronized (DatabaseConnection.class) {
             if (conn == null) {
                 conn = createConnection();
