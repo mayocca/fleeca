@@ -7,12 +7,7 @@ import dev.yocca.fleeca.tables.AccountTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.event.*;
 
-/**
- *
- * @author mayocca
- */
 public class AccountsPanel extends JPanel {
 
     private JLabel accountsHeader;
