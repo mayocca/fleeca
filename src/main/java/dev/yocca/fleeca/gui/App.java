@@ -1,5 +1,7 @@
 package dev.yocca.fleeca.gui;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import dev.yocca.fleeca.gui.components.navigation.Sidebar;
 
 import javax.swing.*;
@@ -77,6 +79,11 @@ public class App extends JFrame {
     }
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new FlatDarculaLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            // Do nothing
+        }
         SwingUtilities.invokeLater(App::new);
     }
 }
