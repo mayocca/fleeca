@@ -35,6 +35,10 @@ public class AccountTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public Account getAccountAt(int rowIndex) {
+        return accounts.get(rowIndex);
+    }
+
     @Override
     public int getRowCount() {
         return accounts.size();

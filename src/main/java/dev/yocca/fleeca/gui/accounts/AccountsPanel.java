@@ -7,6 +7,9 @@ import dev.yocca.fleeca.tables.AccountTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.table.TableCellEditor;
 
 public class AccountsPanel extends JPanel {
 
@@ -45,6 +48,28 @@ public class AccountsPanel extends JPanel {
 
         accountsTable.setModel(model);
         accountsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        accountsTable.getDefaultEditor(String.class).addCellEditorListener(new CellEditorListener() {
+            @Override
+            public void editingStopped(ChangeEvent e) {
+                TableCellEditor editor = (TableCellEditor) e.getSource();
+                int row = accountsTable.getSelectedRow();
+                System.out.println(row);
+                AccountTableModel model = (AccountTableModel) accountsTable.getModel();
+                Account account = model.getAccountAt(row);
+                account.setAlias((String) editor.getCellEditorValue());
+                try {
+                    accountService.update(account);
+                } catch (ServiceException ex) {
+                    JOptionPane.showMessageDialog(AccountsPanel.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void editingCanceled(ChangeEvent e) {
+                // Do nothing
+            }
+        });
+
         accountsScrollPanel.setViewportView(accountsTable);
 
         accountsHeader.setFont(new java.awt.Font("Cantarell", 1, 24)); // NOI18N
