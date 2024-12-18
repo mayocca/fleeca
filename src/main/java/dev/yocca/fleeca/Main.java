@@ -1,10 +1,18 @@
 package dev.yocca.fleeca;
 
 import javax.swing.*;
-import java.awt.*;
+
+import com.formdev.flatlaf.FlatDarculaLaf;
+
+import dev.yocca.fleeca.gui.App;
 
 public class Main {
     public static void main(String[] args) {
-        // TODO: Link existing UI logic
+        try {
+            UIManager.setLookAndFeel(new FlatDarculaLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            // Do nothing
+        }
+        SwingUtilities.invokeLater(App::new);
     }
 }

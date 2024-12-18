@@ -42,18 +42,19 @@ public class App extends JFrame {
                         .addGroup(userAccountPanelLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(userAccountPanelLayout
-                                        .createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addGroup(userAccountPanelLayout.createSequentialGroup()
+                                        .createParallelGroup(
+                                                GroupLayout.Alignment.LEADING)
+                                        .addGroup(userAccountPanelLayout
+                                                .createSequentialGroup()
                                                 .addComponent(userNameLabel)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                        )));
+                                                .addGap(0, 0, Short.MAX_VALUE)))));
         userAccountPanelLayout.setVerticalGroup(
                 userAccountPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(userAccountPanelLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(userNameLabel)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED) ));
-
+                                .addPreferredGap(
+                                        LayoutStyle.ComponentPlacement.RELATED)));
 
         splitPanel.setLeftComponent(sidebar);
 
@@ -76,14 +77,5 @@ public class App extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new FlatDarculaLaf());
-        } catch (UnsupportedLookAndFeelException e) {
-            // Do nothing
-        }
-        SwingUtilities.invokeLater(App::new);
     }
 }
