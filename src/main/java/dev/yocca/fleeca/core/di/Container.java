@@ -2,19 +2,23 @@ package dev.yocca.fleeca.core.di;
 
 import dev.yocca.fleeca.core.di.annotations.Inject;
 import dev.yocca.fleeca.core.di.annotations.Singleton;
+import dev.yocca.fleeca.core.di.exceptions.CircularDependencyException;
 import dev.yocca.fleeca.core.di.exceptions.DependencyCreationException;
 import dev.yocca.fleeca.core.di.exceptions.DependencyNotFoundException;
 import dev.yocca.fleeca.core.di.providers.Provider;
 import dev.yocca.fleeca.core.di.providers.SingletonProvider;
 
 import java.lang.reflect.Constructor;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class Container {
     private final Map<Class<?>, Provider<?>> providers = new ConcurrentHashMap<>();
     private final Map<Class<?>, Object> singletons = new ConcurrentHashMap<>();
     private final Map<Class<?>, Constructor<?>> constructorCache = new ConcurrentHashMap<>();
+    private final ThreadLocal<Set<Class<?>>> resolutionStack = ThreadLocal.withInitial(HashSet::new);
 
     public <T> void register(Class<T> type, T instance) {
         providers.put(type, new SingletonProvider<>(instance));
@@ -26,12 +30,35 @@ public final class Container {
 
     @SuppressWarnings("unchecked")
     public <T> T resolve(Class<T> type) {
-        Provider<?> provider = providers.get(type);
-        if (provider != null) {
-            return (T) provider.get();
+        if (!resolutionStack.get().add(type)) {
+            throw new CircularDependencyException(
+                    "Circular dependency detected while resolving " + type.getName() +
+                    ". Resolution stack: " + resolutionStack.get()
+            );
         }
 
-        return createInstance(type);
+        try {
+            if (singletons.containsKey(type)) {
+                return (T) singletons.get(type);
+            }
+
+            Provider<?> provider = providers.get(type);
+            if (provider != null) {
+                T instance =  (T) provider.get();
+                if (type.isAnnotationPresent(Singleton.class)) {
+                    singletons.put(type, instance);
+                }
+                return instance;
+            }
+
+            return createInstance(type);
+        } finally {
+            resolutionStack.get().remove(type);
+
+            if (resolutionStack.get().isEmpty()) {
+                resolutionStack.remove();
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
