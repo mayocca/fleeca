@@ -23,3 +23,9 @@ Thumbs.db
 # Temporary files
 *.swp
 *~
+
+# Nix files
+result
+
+# Direnv
+.direnv/
