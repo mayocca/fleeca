@@ -1,14 +1,18 @@
 package dev.yocca.fleeca.gui;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
+import dev.yocca.fleeca.gui.accounts.AccountsPanel;
 import dev.yocca.fleeca.gui.components.navigation.Sidebar;
 
 import javax.swing.*;
 
-public class App extends JFrame {
+public class FleecaApp extends JFrame {
 
-    private dev.yocca.fleeca.gui.accounts.AccountsPanel accountsPanel;
+    /**
+     * The name of the application. Will be displayed in the window title.
+     */
+    private static final String APP_NAME = "Fleeca Bank";
+
+    private AccountsPanel accountsPanel;
     private JPanel mainPanel;
     private JScrollPane scrollPanel;
     private JSplitPane splitPanel;
@@ -16,21 +20,38 @@ public class App extends JFrame {
     private JLabel userNameLabel;
     private Sidebar sidebar;
 
-    public App() {
+    public FleecaApp() {
         super();
         setup();
     }
 
     private void setup() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Fleeca Bank");
+        this.configureWindow();
+        this.configureComponents();
 
+        this.pack();
+        this.setVisible(true);
+    }
+
+    /**
+     * Configures the window properties.
+     */
+    private void configureWindow() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle(APP_NAME);
+        this.setLocationRelativeTo(null);
+    }
+
+    /**
+     * Initializes and configures the window components.
+     */
+    private void configureComponents() {
         splitPanel = new JSplitPane();
         userAccountPanel = new JPanel();
         userNameLabel = new JLabel();
         scrollPanel = new JScrollPane();
         mainPanel = new JPanel();
-        accountsPanel = new dev.yocca.fleeca.gui.accounts.AccountsPanel();
+        accountsPanel = new AccountsPanel();
         sidebar = new Sidebar();
 
         splitPanel.setEnabled(false);
@@ -73,9 +94,5 @@ public class App extends JFrame {
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(splitPanel));
-
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
     }
 }

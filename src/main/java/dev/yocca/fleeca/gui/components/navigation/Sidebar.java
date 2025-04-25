@@ -10,20 +10,17 @@ public class Sidebar extends JPanel {
     private JPanel userAccountPanel;
 
     public Sidebar() {
+        super();
         setup();
-        mount();
     }
 
     private void setup() {
-        setBorder(BorderFactory.createEtchedBorder());
+        this.setBorder(BorderFactory.createEtchedBorder());
 
         titleLabel = new JLabel();
         accountsButton = new JButton();
         transferButton = new JButton();
         userAccountPanel = new JPanel();
-    }
-
-    private void mount() {
         transferButton.setText("Transferencias");
         transferButton.setEnabled(false);
 
