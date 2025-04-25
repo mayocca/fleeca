@@ -38,6 +38,7 @@
             <manifest>
                 <attribute name="Main-Class" value="dev.yocca.fleeca.Main"/>
             </manifest>
+            <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
         </jar>
     </target>
 
