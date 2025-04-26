@@ -65,7 +65,7 @@
         formatter = pkgs.nixfmt-rfc-style;
 
         # --- shell ---
-        devShell = pkgs.mkShell {
+        devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             ant
             jdk
